@@ -46,7 +46,9 @@
             <h2 class="section-title">Кто мы?</h2>
             <div class="about-content">
                 <p>Мы студия кастомизации обуви. Каждый заказ — это ручная работа и уникальный стиль.</p>
-                <div class="action-box wide" onclick="window.open('https://t.me/channel_hl', '_blank')">Наши отзывы</div>
+                <div class="center-wrapper">
+                    <button class="review-btn-small" onclick="window.open('https://t.me/channel_hl', '_blank')">Наши отзывы</button>
+                </div>
             </div>
         </div>
 
@@ -67,7 +69,7 @@
                 <input type="text" id="p-price" placeholder="Цена (например, 15 000₽)">
                 <input type="text" id="p-desc" placeholder="Описание товара">
                 <input type="text" id="p-img" placeholder="Ссылка на фото (URL)">
-                <button class="save-btn" onclick="saveProduct()">Опубликовать</button>
+                <button class="save-btn" id="publish-btn" onclick="saveProduct()">Опубликовать</button>
             </div>
             <div id="admin-items-list" style="margin-top: 30px;"></div>
         </div>
