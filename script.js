@@ -14,47 +14,50 @@ let favorites = JSON.parse(localStorage.getItem('favs')) || [];
 function initApp() {
     const user = tg.initDataUnsafe?.user;
     if (user) {
-        document.getElementById('user-name').innerText = user.first_name;
-        if (user.photo_url) {
-            const img = document.getElementById('user-photo');
-            img.src = user.photo_url; img.style.display = 'block';
-        }
+        document.getElementById('user-name').innerText = user.first_name || "Пользователь";
         if (Number(user.id) === Number(MY_ID)) {
-            document.getElementById('admin-btn').classList.remove('hidden');
+            document.getElementById('admin-btn')?.classList.remove('hidden');
         }
     }
     loadProducts();
 }
 
 async function loadProducts() {
-    console.log("Загрузка данных...");
-    const { data, error } = await _supabase.from('sneakers').select('*').order('id', { ascending: false });
+    // 1. Пробуем получить данные
+    const { data, error } = await _supabase
+        .from('sneakers')
+        .select('*')
+        .order('id', { ascending: false });
 
+    // 2. Если ошибка подключения
     if (error) {
-        alert("Ошибка базы: " + error.message);
-        console.error(error);
+        alert("Ошибка подключения: " + error.message);
         return;
     }
 
-    products = data || [];
-    console.log("Данные получены:", products);
-    
+    // 3. Если база ответила, но там 0 строк
+    if (!data || data.length === 0) {
+        console.log("База пуста или RLS блокирует чтение");
+        document.getElementById('product-list').innerHTML = 
+            '<p style="grid-column:1/3; text-align:center; padding:50px; opacity:0.5;">В каталоге пока нет товаров.<br>Попробуйте добавить через админку.</p>';
+        return;
+    }
+
+    // 4. Если данные есть, сохраняем и рисуем
+    products = data;
     renderShop();
-    if (!document.getElementById('admin-page').classList.contains('hidden')) renderAdminItems();
 }
 
 function renderShop() {
     const list = document.getElementById('product-list');
-    if (products.length === 0) {
-        list.innerHTML = '<p style="grid-column:1/3; text-align:center; padding:20px;">Товары не найдены в базе</p>';
-        return;
-    }
+    if (!list) return;
     list.innerHTML = '';
+    
     products.forEach(p => {
         const isFav = favorites.includes(p.id);
         list.innerHTML += `
             <div class="item-card">
-                <img src="${p.img}" onclick="openProduct(${p.id})" onerror="this.src='https://placehold.co/300x300?text=Ошибка+фото'">
+                <img src="${p.img}" onclick="openProduct(${p.id})" onerror="this.src='https://placehold.co/300x300?text=Нет+фото'">
                 <button class="fav-icon-btn" onclick="toggleFav(${p.id})">${isFav ? '❤️' : '🤍'}</button>
                 <div class="item-info" onclick="openProduct(${p.id})">
                     <div style="font-size:13px; font-weight:bold;">${p.name}</div>
@@ -64,10 +67,31 @@ function renderShop() {
     });
 }
 
+// Функции для работы кнопок
 function showSection(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
     if (id === 'main-menu') loadProducts();
+}
+
+async function saveProduct() {
+    const n = document.getElementById('p-name').value;
+    const pr = document.getElementById('p-price').value;
+    const d = document.getElementById('p-desc').value;
+    const i = document.getElementById('p-img').value;
+
+    if(!n || !pr || !i) return alert("Заполни Название, Цену и Фото!");
+
+    const { error } = await _supabase.from('sneakers').insert([{ name: n, price: pr, desc: d, img: i }]);
+    
+    if (error) {
+        alert("Ошибка сохранения: " + error.message);
+    } else {
+        alert("Товар успешно добавлен!");
+        // Очистка и возврат на главную
+        document.querySelectorAll('.admin-form input').forEach(inp => inp.value = '');
+        showSection('main-menu');
+    }
 }
 
 function toggleFav(id) {
@@ -78,50 +102,15 @@ function toggleFav(id) {
     renderShop();
 }
 
-async function saveProduct() {
-    if (Number(tg.initDataUnsafe?.user?.id) !== Number(MY_ID)) return alert("Нет прав");
-    
-    const n = document.getElementById('p-name').value;
-    const pr = document.getElementById('p-price').value;
-    const d = document.getElementById('p-desc').value;
-    const i = document.getElementById('p-img').value;
-
-    if(!n || !pr || !i) return alert("Заполни поля!");
-
-    const { error } = await _supabase.from('sneakers').insert([{ name: n, price: pr, desc: d, img: i }]);
-    
-    if (error) alert("Ошибка сохранения: " + error.message);
-    else {
-        alert("Успешно!");
-        document.querySelectorAll('.admin-form input').forEach(input => input.value = '');
-        loadProducts();
-    }
-}
-
-function renderAdminItems() {
-    const list = document.getElementById('admin-items-list');
-    list.innerHTML = '<h3>Список для удаления:</h3>';
-    products.forEach(p => {
-        list.innerHTML += `<div class="admin-item"><span>${p.name}</span><button class="del-btn" onclick="deleteProduct(${p.id})">Удалить</button></div>`;
-    });
-}
-
-async function deleteProduct(id) {
-    if (Number(tg.initDataUnsafe?.user?.id) !== Number(MY_ID)) return;
-    if(!confirm("Удалить?")) return;
-    await _supabase.from('sneakers').delete().eq('id', id);
-    loadProducts();
-}
-
 function openProduct(id) {
     const p = products.find(x => x.id === id);
     if(!p) return;
     document.getElementById('detail-content').innerHTML = `
-        <img src="${p.img}" style="width:100%; height:300px; object-fit:cover; border-radius:0 0 20px 20px;">
+        <img src="${p.img}" style="width:100%; height:300px; object-fit:cover;">
         <div style="padding:20px;">
-            <h1 style="margin:0;">${p.name}</h1>
-            <h2 style="color:var(--accent); margin:10px 0;">${p.price}</h2>
-            <p style="opacity:0.8; line-height:1.6;">${p.desc || 'Описание отсутствует'}</p>
+            <h1>${p.name}</h1>
+            <h2 style="color:var(--accent);">${p.price}</h2>
+            <p style="opacity:0.8; line-height:1.6; font-size:16px;">${p.desc || 'Описание появится позже'}</p>
         </div>`;
     showSection('product-detail');
 }
