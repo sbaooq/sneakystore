@@ -2,17 +2,18 @@ const tg = window.Telegram.WebApp;
 tg.expand();
 tg.ready();
 
-// --- НАСТРОЙКИ ---
+// --- НАСТРОЙКИ (ВСТАВЬ СВОИ) ---
 const SUPABASE_URL = 'https://zlfjpgjiwzuspudjeeyk.supabase.co';
 const SUPABASE_KEY = 'sb_publishable_qrPjy7NqXpeeiwXQc8o9LQ_j7vrnKpE';
-const MY_ID = 8067897290; // Твой ID цифрами
+const MY_ID = 8067897290; // Твой ID
 
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
+
 let products = [];
 let favorites = JSON.parse(localStorage.getItem('favs')) || [];
 
-// 1. Инициализация
-function init() {
+// Инициализация
+function initApp() {
     const user = tg.initDataUnsafe?.user;
     if (user) {
         document.getElementById('user-name').innerText = user.first_name;
@@ -30,16 +31,21 @@ function init() {
     loadProducts();
 }
 
-// 2. Загрузка данных
+// Загрузка товаров из базы
 async function loadProducts() {
-    const { data, error } = await _supabase.from('sneakers').select('*').order('id', { ascending: false });
-    if (!error) {
+    const { data, error } = await _supabase
+        .from('sneakers')
+        .select('*')
+        .order('id', { ascending: false });
+    
+    if (error) console.error("Ошибка:", error);
+    else {
         products = data;
         renderShop();
     }
 }
 
-// 3. Навигация
+// Переключение страниц
 function showSection(id) {
     document.querySelectorAll('.page').forEach(p => p.classList.add('hidden'));
     document.getElementById(id).classList.remove('hidden');
@@ -49,7 +55,7 @@ function showSection(id) {
     if (id === 'admin-page') renderAdminItems();
 }
 
-// 4. Отрисовка магазина
+// Главная витрина
 function renderShop() {
     const list = document.getElementById('product-list');
     list.innerHTML = '';
@@ -68,34 +74,71 @@ function renderShop() {
     });
 }
 
-// 5. Админка: Добавление и Удаление
+// Избранное
+function toggleFav(id) {
+    const pId = Number(id);
+    const index = favorites.indexOf(pId);
+    if (index > -1) favorites.splice(index, 1);
+    else favorites.push(pId);
+    
+    localStorage.setItem('favs', JSON.stringify(favorites));
+    renderShop();
+    if (!document.getElementById('favorites-page').classList.contains('hidden')) renderFavs();
+}
+
+function renderFavs() {
+    const list = document.getElementById('fav-list');
+    list.innerHTML = '';
+    const favItems = products.filter(p => favorites.includes(p.id));
+    if (favItems.length === 0) {
+        list.innerHTML = '<p style="text-align:center; grid-column:1/3; color:gray; padding-top:20px;">У вас пока нет избранных товаров</p>';
+        return;
+    }
+    favItems.forEach(p => {
+        list.innerHTML += `
+            <div class="item-card">
+                <img src="${p.img}" onclick="openProduct(${p.id})">
+                <div class="item-info">
+                    <h3>${p.name}</h3>
+                    <div class="item-price">${p.price}</div>
+                </div>
+            </div>`;
+    });
+}
+
+// Админка: Добавление
 async function saveProduct() {
     const n = document.getElementById('p-name').value;
     const pr = document.getElementById('p-price').value;
     const d = document.getElementById('p-desc').value;
     const i = document.getElementById('p-img').value;
-    if(!n || !pr || !i) return alert("Заполни всё!");
+    
+    if(!n || !pr || !i) return alert("Заполни поля!");
 
     const { error } = await _supabase.from('sneakers').insert([{ name: n, price: pr, desc: d, img: i }]);
-    if (error) alert(error.message);
+    if (error) alert("Ошибка: " + error.message);
     else {
-        alert("Товар добавлен!");
+        alert("Опубликовано!");
         document.querySelectorAll('.admin-form input').forEach(inp => inp.value = '');
         await loadProducts();
         renderAdminItems();
     }
 }
 
+// Админка: Удаление
 function renderAdminItems() {
     const list = document.getElementById('admin-items-list');
-    list.innerHTML = '<h3 style="margin-top:20px;">Удалить товары:</h3>';
+    list.innerHTML = '<h3 style="margin-bottom:15px;">Список товаров (Удаление):</h3>';
     products.forEach(p => {
-        list.innerHTML += `<div class="admin-item"><span>${p.name}</span><button class="del-btn" onclick="deleteProduct(${p.id})">Удалить</button></div>`;
+        const row = document.createElement('div');
+        row.className = 'admin-item';
+        row.innerHTML = `<span>${p.name}</span> <button class="del-btn" onclick="deleteProduct(${p.id})">Удалить</button>`;
+        list.appendChild(row);
     });
 }
 
 async function deleteProduct(id) {
-    if(!confirm("Удалить?")) return;
+    if(!confirm("Удалить этот товар?")) return;
     const { error } = await _supabase.from('sneakers').delete().eq('id', id);
     if(error) alert(error.message);
     else {
@@ -104,36 +147,18 @@ async function deleteProduct(id) {
     }
 }
 
-// 6. Избранное
-function toggleFav(id) {
-    if (favorites.includes(id)) favorites = favorites.filter(f => f !== id);
-    else favorites.push(id);
-    localStorage.setItem('favs', JSON.stringify(favorites));
-    renderShop();
-    renderFavs();
-}
-
-function renderFavs() {
-    const list = document.getElementById('fav-list');
-    list.innerHTML = '';
-    const favItems = products.filter(p => favorites.includes(p.id));
-    if(!favItems.length) list.innerHTML = 'Пусто';
-    favItems.forEach(p => {
-        list.innerHTML += `<div class="item-card"><img src="${p.img}" onclick="openProduct(${p.id})"><div class="item-info"><h3>${p.name}</h3><div class="item-price">${p.price}</div></div></div>`;
-    });
-}
-
-// 7. Просмотр товара
+// Открытие товара
 function openProduct(id) {
     const p = products.find(x => x.id === id);
+    if(!p) return;
     document.getElementById('detail-content').innerHTML = `
-        <img src="${p.img}" style="width:100%; height:300px; object-fit:cover; border-radius:0 0 20px 20px;">
+        <img src="${p.img}" style="width:100%; height:320px; object-fit:cover; border-radius:0 0 25px 25px;">
         <div style="padding:20px;">
-            <h1>${p.name}</h1>
-            <h2 style="color:var(--accent)">${p.price}</h2>
-            <p>${p.desc}</p>
+            <h1 style="margin:0 0 10px 0;">${p.name}</h1>
+            <div style="font-size:24px; font-weight:800; color:var(--accent); margin-bottom:15px;">${p.price}</div>
+            <p style="line-height:1.6; font-size:16px;">${p.desc}</p>
         </div>`;
     showSection('product-detail');
 }
 
-init();
+initApp();
