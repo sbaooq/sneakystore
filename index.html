@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Custom Sneakers</title>
+    <title>Custom Sneakers Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -13,17 +13,20 @@
         <div id="main-menu" class="page">
             <header class="profile-card">
                 <div class="user-info">
-                    <img id="user-photo" src="" alt="">
-                    <span id="user-name">Пользователь</span>
+                    <img id="user-photo" src="" alt="" style="display:none;">
+                    <span id="user-name">Загрузка...</span>
                 </div>
-                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">Перейти <span class="arrow"></span></button>
+                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">Избранное <span>&rsaquo;</span></button>
             </header>
+
             <div class="action-grid">
                 <div class="action-box" onclick="window.open('https://t.me/broyad', '_blank')">Написать менеджеру</div>
                 <div class="action-box" onclick="showSection('about-page')">Кто мы? Отзывы</div>
             </div>
+
             <h2 class="section-title">Готовые кроссовки</h2>
             <div id="product-list" class="product-grid"></div>
+
             <button class="order-custom-btn" onclick="window.open('https://t.me/broyad', '_blank')">Заказать кастомные кроссовки</button>
             <button id="admin-btn" class="admin-entry hidden" onclick="showSection('admin-page')">⚙️ Админка</button>
         </div>
@@ -31,7 +34,7 @@
         <div id="favorites-page" class="page hidden">
             <div class="header-row">
                 <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <h2>Избранное</h2>
             </div>
@@ -41,20 +44,20 @@
         <div id="about-page" class="page hidden">
             <div class="header-row">
                 <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <h2>Кто мы?</h2>
             </div>
             <div class="about-content">
-                <p>Мы создаем эксклюзивные кастомные кроссовки. Каждая пара — это ручная работа, качественные краски и уникальный стиль.</p>
+                <p>Мы — студия кастомизации обуви. Мы превращаем обычные кроссовки в уникальные арт-объекты.</p>
                 <div class="action-box wide" onclick="window.open('https://t.me/channel_hl', '_blank')">Отзывы покупателей</div>
             </div>
         </div>
 
         <div id="product-detail" class="page hidden">
-            <div class="header-row fixed">
-                <button class="square-back blur" onclick="showSection('main-menu')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+            <div class="header-row-fixed">
+                <button class="square-back" onclick="showSection('main-menu')">
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
             </div>
             <div id="detail-content"></div>
@@ -63,22 +66,21 @@
         <div id="admin-page" class="page hidden">
             <div class="header-row">
                 <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
+                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
                 </button>
                 <h2>Управление</h2>
             </div>
             <div class="admin-form">
                 <input type="text" id="p-name" placeholder="Название">
-                <input type="text" id="p-price" placeholder="Цена">
-                <input type="text" id="p-desc" placeholder="Описание">
-                <input type="text" id="p-img" placeholder="URL Фото">
-                <button class="save-btn" onclick="saveProduct()">Опубликовать для всех</button>
+                <input type="text" id="p-price" placeholder="Цена (например, 15 000₽)">
+                <input type="text" id="p-desc" placeholder="Описание (до 10 слов)">
+                <input type="text" id="p-img" placeholder="URL фото">
+                <button class="save-btn" onclick="saveProduct()">Опубликовать</button>
             </div>
-            <hr>
+            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--sec-bg);">
             <div id="admin-items-list"></div>
         </div>
     </div>
     <script src="script.js"></script>
 </body>
 </html>
-
