@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sneaker Custom Shop</title>
+    <title>Custom Sneakers Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -27,7 +27,7 @@
             <h2 class="section-title">Готовые кроссовки</h2>
             <div id="product-list" class="product-grid"></div>
 
-            <button class="order-custom-btn" onclick="window.open('https://t.me/broyad', '_blank')">Заказать кастом</button>
+            <button class="order-custom-btn" onclick="window.open('https://t.me/broyad', '_blank')">Заказать кастомные кроссовки</button>
             <button id="admin-btn" class="admin-entry hidden" onclick="showSection('admin-page')">⚙️ Админка</button>
         </div>
 
@@ -35,7 +35,7 @@
             <button class="square-back" onclick="showSection('main-menu')">
                 <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <h2>Избранное</h2>
+            <h2 class="section-title">Ваше избранное</h2>
             <div id="fav-list" class="product-grid"></div>
         </div>
 
@@ -43,9 +43,9 @@
             <button class="square-back" onclick="showSection('main-menu')">
                 <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <h2>О нас</h2>
+            <h2 class="section-title">Кто мы?</h2>
             <div class="about-content">
-                <p>Мы создаем уникальный дизайн для вашей обуви.</p>
+                <p>Мы студия кастомизации обуви. Каждый заказ — это ручная работа и уникальный стиль.</p>
                 <div class="action-box wide" onclick="window.open('https://t.me/channel_hl', '_blank')">Наши отзывы</div>
             </div>
         </div>
@@ -61,15 +61,15 @@
             <button class="square-back" onclick="showSection('main-menu')">
                 <svg viewBox="0 0 24 24"><path d="M15 18l-6-6 6-6"/></svg>
             </button>
-            <h2>Управление магазином</h2>
+            <h2 class="section-title">Админ-панель</h2>
             <div class="admin-form">
                 <input type="text" id="p-name" placeholder="Название">
                 <input type="text" id="p-price" placeholder="Цена (например, 15 000₽)">
-                <input type="text" id="p-desc" placeholder="Описание">
-                <input type="text" id="p-img" placeholder="URL фото">
-                <button class="save-btn" onclick="saveProduct()">Опубликовать товар</button>
+                <input type="text" id="p-desc" placeholder="Описание товара">
+                <input type="text" id="p-img" placeholder="Ссылка на фото (URL)">
+                <button class="save-btn" onclick="saveProduct()">Опубликовать</button>
             </div>
-            <div id="admin-items-list"></div>
+            <div id="admin-items-list" style="margin-top: 30px;"></div>
         </div>
     </div>
     <script src="script.js"></script>
