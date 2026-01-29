@@ -7,7 +7,7 @@ const SUPABASE_URL = 'https://zlfjpgjiwzuspudjeeyk.supabase.co'; // ВСТАВЬ
 const SUPABASE_KEY = 'sb_publishable_qrPjy7NqXpeeiwXQc8o9LQ_j7vrnKpE'; // ВСТАВЬ СВОЙ
 const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 
-const MY_ID = ; // ВСТАВЬ СВОЙ ID ЦИФРАМИ
+const MY_ID = 8067897290; // ВСТАВЬ СВОЙ ID ЦИФРАМИ
 let products = [];
 let favorites = JSON.parse(localStorage.getItem('favs')) || [];
 
