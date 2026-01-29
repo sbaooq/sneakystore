@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Custom Sneakers Store</title>
+    <title>Sneaker Shop</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -13,10 +13,10 @@
         <div id="main-menu" class="page">
             <header class="profile-card">
                 <div class="user-info">
-                    <img id="user-photo" src="" alt="" style="display:none;">
+                    <img id="user-photo" src="" alt="" style="display:none; width:40px; height:40px; border-radius:50%;">
                     <span id="user-name">Загрузка...</span>
                 </div>
-                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">Избранное <span>&rsaquo;</span></button>
+                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">Избранное</button>
             </header>
 
             <div class="action-grid">
@@ -33,9 +33,7 @@
 
         <div id="favorites-page" class="page hidden">
             <div class="header-row">
-                <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
+                <button class="square-back" onclick="showSection('main-menu')">←</button>
                 <h2>Избранное</h2>
             </div>
             <div id="fav-list" class="product-grid"></div>
@@ -43,42 +41,33 @@
 
         <div id="about-page" class="page hidden">
             <div class="header-row">
-                <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
+                <button class="square-back" onclick="showSection('main-menu')">←</button>
                 <h2>Кто мы?</h2>
             </div>
             <div class="about-content">
-                <p>Мы — студия кастомизации обуви. Мы превращаем обычные кроссовки в уникальные арт-объекты.</p>
+                <p>Мы создаем эксклюзивные кастомные кроссовки ручной работы.</p>
                 <div class="action-box wide" onclick="window.open('https://t.me/channel_hl', '_blank')">Отзывы покупателей</div>
             </div>
         </div>
 
         <div id="product-detail" class="page hidden">
-            <div class="header-row-fixed">
-                <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-            </div>
+            <button class="square-back" style="margin: 10px;" onclick="showSection('main-menu')">←</button>
             <div id="detail-content"></div>
         </div>
 
         <div id="admin-page" class="page hidden">
             <div class="header-row">
-                <button class="square-back" onclick="showSection('main-menu')">
-                    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M15 18l-6-6 6-6"/></svg>
-                </button>
-                <h2>Управление</h2>
+                <button class="square-back" onclick="showSection('main-menu')">←</button>
+                <h2>Админка</h2>
             </div>
             <div class="admin-form">
                 <input type="text" id="p-name" placeholder="Название">
-                <input type="text" id="p-price" placeholder="Цена (например, 15 000₽)">
-                <input type="text" id="p-desc" placeholder="Описание (до 10 слов)">
+                <input type="text" id="p-price" placeholder="Цена">
+                <input type="text" id="p-desc" placeholder="Описание">
                 <input type="text" id="p-img" placeholder="URL фото">
-                <button class="save-btn" onclick="saveProduct()">Опубликовать</button>
+                <button class="save-btn" onclick="saveProduct()">Добавить товар</button>
             </div>
-            <hr style="margin: 20px 0; border: 0; border-top: 1px solid var(--sec-bg);">
-            <div id="admin-items-list"></div>
+            <div id="admin-items-list" style="margin-top:20px;"></div>
         </div>
     </div>
     <script src="script.js"></script>
