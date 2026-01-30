@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>KAYKAS Store</title>
+    <title>Sneaker Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -11,59 +11,39 @@
 <body>
     <div id="app">
         <div id="main-menu" class="page">
-            <header class="user-card">
+            <header class="profile-card">
                 <div class="user-info">
-                    <img id="user-photo" src="" style="display:none;">
+                    <img id="user-photo" src="" alt="" style="display:none;">
                     <span id="user-name">Загрузка...</span>
                 </div>
-                <div class="header-btns">
-                    <button class="icon-btn" onclick="showSection('favorites-page')">❤️</button>
-                </div>
+                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">❤️</button>
             </header>
 
-            <div class="welcome-banner">
-                <h1>KAYKAS CUSTOMS</h1>
-                <p>Уникальный дизайн для твоих ног</p>
-            </div>
-
             <div class="action-grid">
-                <div class="action-card" onclick="window.open('https://t.me/broyad', '_blank')">
-                    <span>💬 Связь с нами</span>
-                </div>
-                <div class="action-card" onclick="window.open('https://t.me/channel_hl', '_blank')">
-                    <span>⭐️ Отзывы</span>
-                </div>
+                <div class="action-box" onclick="window.open('https://t.me/broyad', '_blank')">Написать менеджеру</div>
+                <div class="action-box" onclick="window.open('https://t.me/channel_hl', '_blank')">Наши отзывы</div>
             </div>
 
             <div id="product-list" class="product-grid"></div>
 
-            <button id="admin-btn" class="admin-access-btn hidden" onclick="showSection('admin-page')">⚙️ Управление магазином</button>
+            <button class="order-custom-btn" onclick="window.open('https://t.me/broyad', '_blank')">Заказать кастом</button>
+            <button id="admin-btn" class="admin-entry hidden" onclick="showSection('admin-page')">⚙️ Админка</button>
         </div>
 
-        <div id="favorites-page" class="page hidden">
-            <button class="back-btn" onclick="showSection('main-menu')">← Назад</button>
-            <h2 class="page-title">Твоё избранное</h2>
-            <div id="fav-list" class="product-grid"></div>
-        </div>
-
-        <div id="product-detail" class="page hidden no-padding">
+        <div id="product-detail" class="page hidden" style="padding:0;">
             <div id="detail-content"></div>
         </div>
 
         <div id="admin-page" class="page hidden">
-            <button class="back-btn" onclick="showSection('main-menu')">← Выйти из меню</button>
-            <h2 class="page-title">Добавить новинку</h2>
-            
+            <button class="square-back" onclick="showSection('main-menu')">←</button>
             <div class="admin-form">
-                <input type="text" id="p-name" placeholder="Название (напр. Jordan 1 Retro)">
-                <input type="text" id="p-price" placeholder="Цена (напр. 12 500 ₽)">
-                <input type="text" id="p-desc" placeholder="Описание (материалы, сроки)">
-                <input type="text" id="p-img" placeholder="Прямая ссылка на фото (.jpg, .png)">
-                <button class="save-btn" id="publish-btn" onclick="saveProduct()">Опубликовать в каталог</button>
+                <input type="text" id="p-name" placeholder="Название товара">
+                <input type="text" id="p-price" placeholder="Цена">
+                <input type="text" id="p-desc" placeholder="Описание">
+                <input type="text" id="p-img" placeholder="Ссылка на фото (URL)">
+                <button class="save-btn" id="publish-btn" onclick="saveProduct()">Опубликовать</button>
             </div>
-
-            <div id="admin-items-list" class="admin-delete-list">
-                </div>
+            <div id="admin-items-list"></div>
         </div>
     </div>
     <script src="script.js"></script>
