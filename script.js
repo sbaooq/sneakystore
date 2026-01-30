@@ -1,7 +1,4 @@
 const tg = window.Telegram.WebApp;
-tg.expand();
-tg.ready();
-
 const SUPABASE_URL = 'https://zlfjpgjiwzuspudjeeyk.supabase.co'; 
 const SUPABASE_KEY = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InpsZmpwZ2ppd3p1c3B1ZGplZXlrIiwicm9sZSI6ImFub24iLCJpYXQiOjE3Njk2OTQ5OTMsImV4cCI6MjA4NTI3MDk5M30.8Mg1h48q4ChV84un3n4DPKl-Vr9d49HmAWJoAAXmVCc'; 
 const MY_ID = 8067897290; 
@@ -10,15 +7,16 @@ const _supabase = supabase.createClient(SUPABASE_URL, SUPABASE_KEY);
 let products = [];
 
 function initApp() {
+    tg.expand();
     const user = tg.initDataUnsafe?.user;
     if (user) {
-        document.getElementById('user-name').innerText = user.first_name || "Guest";
+        document.getElementById('user-name').innerText = user.first_name || "User";
         if (user.photo_url) {
             const img = document.getElementById('user-photo');
             img.src = user.photo_url; img.style.display = 'block';
         }
         if (Number(user.id) === Number(MY_ID)) {
-            document.getElementById('admin-btn')?.classList.remove('hidden');
+            document.getElementById('admin-btn').classList.remove('hidden');
         }
     }
     loadProducts();
@@ -26,7 +24,7 @@ function initApp() {
 
 async function loadProducts() {
     const { data, error } = await _supabase.from('sneakers').select('*').order('id', { ascending: false });
-    if (error) return;
+    if (error) return console.error(error);
     products = data || [];
     renderShop();
     renderAdminItems();
@@ -54,10 +52,10 @@ function openProduct(id) {
         <button class="floating-back" onclick="showSection('main-menu')">✕</button>
         <img src="${p.img}" style="width:100%; height:300px; object-fit:cover;">
         <div style="padding:20px;">
-            <h1>${p.name}</h1>
-            <h2 style="color:var(--accent);">${p.price}</h2>
-            <p style="line-height:1.6; opacity:0.8;">${p.desc || 'Нет описания'}</p>
-            <button class="order-custom-btn" onclick="window.open('https://t.me/broyad')">Заказать эту пару</button>
+            <h1 style="margin:0;">${p.name}</h1>
+            <h2 style="color:var(--accent); margin:10px 0;">${p.price}</h2>
+            <p style="opacity:0.8; line-height:1.6;">${p.desc || 'Нет описания'}</p>
+            <button style="width:100%; padding:16px; background:var(--accent); color:white; border:none; border-radius:15px; font-weight:700; margin-top:20px;" onclick="window.open('https://t.me/broyad')">Заказать эту пару</button>
         </div>`;
     showSection('product-detail');
 }
@@ -68,7 +66,6 @@ async function saveProduct() {
     const d = document.getElementById('p-desc').value;
     const i = document.getElementById('p-img').value;
     if(!n || !pr || !i) return alert("Заполни поля!");
-
     const { error } = await _supabase.from('sneakers').insert([{ name: n, price: pr, desc: d, img: i }]);
     if (error) alert(error.message);
     else { alert("Добавлено!"); loadProducts(); showSection('main-menu'); }
@@ -76,13 +73,9 @@ async function saveProduct() {
 
 function renderAdminItems() {
     const list = document.getElementById('admin-items-list');
-    list.innerHTML = '<h3 style="margin-top:20px;">Удаление:</h3>';
+    list.innerHTML = '<h3 style="margin-top:20px;">Удалить товар:</h3>';
     products.forEach(p => {
-        list.innerHTML += `
-            <div class="admin-item">
-                <span>${p.name}</span>
-                <button class="del-btn" onclick="deleteProduct(${p.id})">Удалить</button>
-            </div>`;
+        list.innerHTML += `<div class="admin-item"><span>${p.name}</span><button style="color:red; border:none; background:none; font-weight:700;" onclick="deleteProduct(${p.id})">Удалить</button></div>`;
     });
 }
 
