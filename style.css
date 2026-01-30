@@ -1,52 +1,39 @@
 :root {
     --bg: #ffffff;
-    --sec-bg: #f4f4f7;
-    --text: #1c1c1e;
+    --sec-bg: #f1f1f4;
+    --text: #000000;
     --accent: #007aff;
-    --danger: #ff3b30;
-    --shadow: 0 4px 12px rgba(0,0,0,0.08);
 }
 
-body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, sans-serif; background: var(--bg); color: var(--text); -webkit-tap-highlight-color: transparent; }
+body { background: var(--bg); color: var(--text); margin: 0; font-family: -apple-system, sans-serif; }
 .page { padding: 16px; min-height: 100vh; box-sizing: border-box; }
-.page.hidden { display: none !important; }
-.page.no-padding { padding: 0; }
+.hidden { display: none !important; }
 
-/* Шапка пользователя */
-.user-card { display: flex; justify-content: space-between; align-items: center; padding: 10px 0; margin-bottom: 15px; }
-.user-info { display: flex; align-items: center; gap: 10px; font-weight: 700; font-size: 18px; }
-.user-info img { width: 36px; height: 36px; border-radius: 50%; border: 2px solid var(--accent); }
+/* Кнопка Назад поверх фото */
+.floating-back { 
+    position: absolute; top: 16px; left: 16px; z-index: 10; 
+    background: rgba(255,255,255,0.8); border: none; 
+    width: 40px; height: 40px; border-radius: 50%; font-size: 20px;
+    display: flex; align-items: center; justify-content: center;
+}
 
-.welcome-banner { background: var(--sec-bg); padding: 20px; border-radius: 20px; margin-bottom: 20px; }
-.welcome-banner h1 { margin: 0; font-size: 22px; }
-.welcome-banner p { margin: 5px 0 0; opacity: 0.6; font-size: 14px; }
+.profile-card { background: var(--sec-bg); border-radius: 18px; padding: 12px 16px; display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px; }
+.user-info { display: flex; align-items: center; gap: 10px; font-weight: 700; }
+.user-info img { width: 34px; height: 34px; border-radius: 50%; }
 
-.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 25px; }
-.action-card { background: var(--sec-bg); padding: 15px; border-radius: 15px; text-align: center; font-weight: 600; font-size: 13px; }
+.action-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-bottom: 20px; }
+.action-box { background: var(--sec-bg); height: 65px; border-radius: 15px; display: flex; align-items: center; justify-content: center; text-align: center; font-size: 13px; font-weight: 600; padding: 10px; }
 
-/* Кнопки */
-.back-btn { background: var(--sec-bg); border: none; padding: 8px 16px; border-radius: 10px; font-weight: 600; margin-bottom: 15px; }
-.icon-btn { background: var(--sec-bg); border: none; width: 40px; height: 40px; border-radius: 50%; font-size: 18px; }
-
-/* Сетка товаров */
 .product-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
-.item-card { background: var(--sec-bg); border-radius: 20px; overflow: hidden; position: relative; transition: 0.2s; }
-.item-card:active { transform: scale(0.97); }
-.item-card img { width: 100%; height: 140px; object-fit: cover; background: #e5e5ea; }
-.item-info { padding: 12px; }
-.item-info .name { font-weight: 600; font-size: 14px; display: block; margin-bottom: 4px; }
-.item-info .price { color: var(--accent); font-weight: 800; font-size: 15px; }
+.item-card { background: var(--sec-bg); border-radius: 18px; overflow: hidden; position: relative; }
+.item-card img { width: 100%; height: 130px; object-fit: cover; }
+.item-info { padding: 10px; }
 
-/* Детали товара */
-.floating-back { position: absolute; top: 20px; left: 20px; z-index: 10; background: rgba(255,255,255,0.9); width: 40px; height: 40px; border-radius: 12px; border: none; font-size: 20px; box-shadow: var(--shadow); }
-.detail-img { width: 100%; height: 380px; object-fit: cover; }
-.detail-body { padding: 24px; background: white; border-radius: 30px 30px 0 0; margin-top: -30px; position: relative; }
-.order-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 18px; border-radius: 18px; font-size: 16px; font-weight: 700; margin-top: 20px; }
+.order-custom-btn { width: 100%; background: var(--accent); color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 700; margin-top: 25px; }
 
-/* Админка */
-.admin-form input { width: 100%; padding: 15px; margin-bottom: 10px; border-radius: 14px; border: 1px solid #e5e5ea; box-sizing: border-box; font-size: 15px; }
-.save-btn { width: 100%; background: #34c759; color: white; border: none; padding: 16px; border-radius: 14px; font-weight: 700; }
-.admin-delete-list { margin-top: 30px; }
-.admin-item { display: flex; justify-content: space-between; align-items: center; padding: 12px; background: var(--sec-bg); border-radius: 12px; margin-bottom: 8px; }
-.del-btn { color: var(--danger); border: none; background: none; font-weight: 700; }
-.admin-access-btn { width: 100%; background: none; border: 1px dashed var(--accent); color: var(--accent); padding: 15px; border-radius: 15px; margin-top: 30px; font-weight: 600; }
+/* Админка стили */
+.admin-form input { width: 100%; padding: 14px; margin-bottom: 10px; border-radius: 12px; border: 1px solid #ddd; background: #fff; color: #000; box-sizing: border-box; }
+.save-btn { width: 100%; padding: 15px; background: #34c759; color: white; border: none; border-radius: 12px; font-weight: 700; }
+.admin-item { background: var(--sec-bg); padding: 12px; border-radius: 12px; display: flex; justify-content: space-between; margin-top: 8px; align-items: center; }
+.del-btn { color: #ff3b30; border: none; background: none; font-weight: 800; }
+.admin-entry { background: none; border: 1px solid var(--accent); color: var(--accent); width: 100%; padding: 10px; border-radius: 12px; margin-top: 20px; }
