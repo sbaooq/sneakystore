@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-    <title>Sneaker Store</title>
+    <title>Store</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
     <link rel="stylesheet" href="style.css">
@@ -13,21 +13,20 @@
         <div id="main-menu" class="page">
             <header class="profile-card">
                 <div class="user-info">
-                    <img id="user-photo" src="" alt="" style="display:none;">
+                    <img id="user-photo" src="" style="display:none;">
                     <span id="user-name">Загрузка...</span>
                 </div>
-                <button class="nav-arrow-btn" onclick="showSection('favorites-page')">❤️</button>
+                <button class="nav-btn" onclick="alert('В разработке')">❤️</button>
             </header>
 
             <div class="action-grid">
-                <div class="action-box" onclick="window.open('https://t.me/broyad', '_blank')">Написать менеджеру</div>
-                <div class="action-box" onclick="window.open('https://t.me/channel_hl', '_blank')">Наши отзывы</div>
+                <div class="action-box" onclick="window.open('https://t.me/broyad')">Написать менеджеру</div>
+                <div class="action-box" onclick="window.open('https://t.me/channel_hl')">Наши отзывы</div>
             </div>
 
             <div id="product-list" class="product-grid"></div>
 
-            <button class="order-custom-btn" onclick="window.open('https://t.me/broyad', '_blank')">Заказать кастом</button>
-            <button id="admin-btn" class="admin-entry hidden" onclick="showSection('admin-page')">⚙️ Админка</button>
+            <button id="admin-btn" class="admin-entry hidden" onclick="showSection('admin-page')">⚙️ Админ-панель</button>
         </div>
 
         <div id="product-detail" class="page hidden" style="padding:0;">
@@ -35,13 +34,13 @@
         </div>
 
         <div id="admin-page" class="page hidden">
-            <button class="square-back" onclick="showSection('main-menu')">←</button>
+            <button class="back-btn-simple" onclick="showSection('main-menu')">← Назад</button>
             <div class="admin-form">
-                <input type="text" id="p-name" placeholder="Название товара">
+                <input type="text" id="p-name" placeholder="Название">
                 <input type="text" id="p-price" placeholder="Цена">
                 <input type="text" id="p-desc" placeholder="Описание">
-                <input type="text" id="p-img" placeholder="Ссылка на фото (URL)">
-                <button class="save-btn" id="publish-btn" onclick="saveProduct()">Опубликовать</button>
+                <input type="text" id="p-img" placeholder="Ссылка на фото">
+                <button class="save-btn" onclick="saveProduct()">Опубликовать</button>
             </div>
             <div id="admin-items-list"></div>
         </div>
